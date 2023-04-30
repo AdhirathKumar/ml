@@ -1,34 +1,28 @@
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-%matplotlib inline
-df = pd.read_csv('/content/sample_data/titanic.csv')
-df.head()
-df.info()
-df.drop(['PassengerId','Name','Ticket','Fare','Cabin'],axis=1,inplace=True)
-df.columns
-df1=df.fillna({'Age':df['Age'].mean()})
-df1.corr()
-df1.drop(['Embarked','SibSp','Parch'],axis=1,inplace=True)
-df1.columns
-from sklearn.preprocessing import LabelEncoder 
-le=LabelEncoder()
-df1['Sex']=le.fit_transform(df1['Sex'])
-X=df1[['Pclass','Sex']]
-y=df1['Survived']
+from sklearn.preprocessing import LabelEncoder
 from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
-lda= LinearDiscriminantAnalysis()
-X_t=lda.fit_transform(X, y)
-lda.explained_variance_ratio_
 from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X_t, y, random_state=1)
-from sklearn.ensemble import RandomForestClassifier
-model= RandomForestClassifier(random_state=0)
-model.fit(X_train,y_train)
-from sklearn.model_selection import cross_val_score
-scores=cross_val_score(lda,X,y)
-scores
-from sklearn.metrics import confusion_matrix
+from sklearn.metrics import classification_report
+
+# Load dataset
+df = pd.read_csv('dataset.csv')
+
+# Split dataset into features and target
+X = df.drop('target_variable', axis=1)
+y = df['target_variable']
+
+# Encode target variable
+encoder = LabelEncoder()
+y = encoder.fit_transform(y)
+
+# Split dataset into train and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Apply LDA
+lda = LinearDiscriminantAnalysis()
+lda.fit(X_train, y_train)
 y_pred = lda.predict(X_test)
-cm = confusion_matrix(y_test, y_pred)
-cm
+
+# Classification report
+report = classification_report(y_test, y_pred)
+print(report)
