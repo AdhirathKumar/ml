@@ -1,16 +1,11 @@
-nltk.download('punkt')
 import nltk
-from nltk.corpus import stopwords
-nltk.download('stopwords')
 from nltk.tokenize import word_tokenize
-text="What were they eating? It did not taste like anything she had ever eaten before and although she was famished."
-texttk = word_tokenize(text)
-nosw = [word for word in texttk if not word in stopwords.words()]
-print(nosw)
-import pandas as pd
-data = pd.read_csv("movies.csv")
-dL=data["Film"].tolist()
-dT=" ".join(dL)
-texttk = word_tokenize(dT)
-nosw = [word for word in texttk if not word in stopwords.words()]
-print(nosw)
+
+# Define sentence
+sentence = "The quick brown fox jumps over the lazy dog"
+
+# Tokenize sentence into words
+words = word_tokenize(sentence)
+
+# Display words
+print(words)
