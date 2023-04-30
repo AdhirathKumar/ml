@@ -7,6 +7,8 @@ img = cv2.imread('/content/drive/MyDrive/Week-3 Images/3_week_input.jpg', cv2.IM
 edges = cv2.Canny(img, 100, 200)
 # Save the resulting edge image to a file
 cv2.imwrite('/content/drive/MyDrive/Week-3 Images/3_week_output.jpg', edges)
+
+
 import numpy as np
 import cv2
 # Load the image
