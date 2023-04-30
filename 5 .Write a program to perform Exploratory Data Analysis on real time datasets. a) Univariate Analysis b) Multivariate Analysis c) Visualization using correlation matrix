@@ -1,0 +1,21 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+df=pd.read_csv('/content/sample_data/iris.data')
+df.head()
+df['species'].unique()
+df['species'].value_counts(normalize=True).plot.pie()
+plt.show()
+df_setosa=df.loc[df['species']=='Iris-setosa']
+df_versicolor=df.loc[df['species']=='Iris-versicolor']
+df_virginica=df.loc[df['species']=='Iris-virginica']
+plt.plot(df_setosa['sepal_length'],np.zeros_like(df_setosa['sepal_length']),'x')
+plt.plot(df_virginica['sepal_length'],np.zeros_like(df_virginica['sepal_length']),'o')
+plt.plot(df_versicolor['sepal_length'],np.zeros_like(df_versicolor['sepal_length']),'^')
+plt.xlabel('sepal_length')
+plt.show()
+sns.pairplot(df,hue="species",height=5)
+plt.show()
+sns.heatmap(df.corr(),annot=True,cmap='Blues')
+plt.show()
