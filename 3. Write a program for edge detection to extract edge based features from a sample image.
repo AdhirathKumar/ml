@@ -1,0 +1,25 @@
+from google.colab import drive
+drive.mount('/content/drive')
+import cv2
+# Read in the sample image
+img = cv2.imread('/content/drive/MyDrive/Week-3 Images/3_week_input.jpg', cv2.IMREAD_GRAYSCALE)
+# Apply the Canny algorithm to detect edges
+edges = cv2.Canny(img, 100, 200)
+# Save the resulting edge image to a file
+cv2.imwrite('/content/drive/MyDrive/Week-3 Images/3_week_output.jpg', edges)
+import numpy as np
+import cv2
+# Load the image
+img = cv2.imread('/content/drive/MyDrive/Week-3 Images/3_week_input.jpg', 0)
+# Apply the Sobel operator
+sobelx = cv2.Sobel(img, cv2.CV_64F, 1, 0, ksize=5)
+sobely = cv2.Sobel(img, cv2.CV_64F, 0, 1, ksize=5)
+# Find the magnitude of the gradient
+mag = np.sqrt(sobelx**2 + sobely**2)
+# Normalize the magnitude to the range [0, 255]
+mag = np.uint8(mag * 255 / np.max(mag))
+# Display the result
+#cv2.imshow('Sobel Edge Detection', mag)
+cv2.imwrite('/content/drive/MyDrive/Week-3 Images/sobel_1_output.jpg',mag)
+cv2.waitKey(0)
+cv2.destroyAllWindows()
