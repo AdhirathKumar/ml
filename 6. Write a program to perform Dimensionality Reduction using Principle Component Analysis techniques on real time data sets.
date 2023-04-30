@@ -1,32 +1,29 @@
-import numpy as np
 import pandas as pd
-url = "https://archive.ics.uci.edu/ml/machine-learning-databases/iris/iris.data"
-names = ['sepal-length','sepal-width','petal-length','petal-width','Class']
-dataset = pd.read_csv(url, names=names)
-X = dataset.drop('Class',1)
-y = dataset['Class']
-from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 from sklearn.preprocessing import StandardScaler
-sc = StandardScaler()
-X_train = sc.fit_transform(X_train)
-X_test = sc.transform(X_test)
 from sklearn.decomposition import PCA
-pca = PCA()
-X_train = pca.fit_transform(X_train)
-X_test = pca.transform(X_test)
-explained_variance = pca.explained_variance_ratio_
-explained_variance
-from sklearn.decomposition import PCA
-pca = PCA(n_components=1)
-X_train = pca.fit_transform(X_train)
-X_test = pca.transform(X_test)
-from sklearn.ensemble import RandomForestClassifier
-classifier = RandomForestClassifier(max_depth=2, random_state=0)
-classifier.fit(X_train, y_train)
-y_pred = classifier.predict(X_test)
-from sklearn.metrics import confusion_matrix
-from sklearn.metrics import accuracy_score
-cm = confusion_matrix(y_test, y_pred)
-print(cm)
-print('Accuracy: '+str(accuracy_score(y_test, y_pred)))
+import matplotlib.pyplot as plt
+
+# Load dataset
+df = pd.read_csv('dataset.csv')
+
+# Standardize data
+scaler = StandardScaler()
+df_scaled = scaler.fit_transform(df)
+
+# Apply PCA
+pca = PCA(n_components=2)
+pca.fit(df_scaled)
+df_pca = pca.transform(df_scaled)
+
+# Create new DataFrame with reduced dimensions
+df_reduced = pd.DataFrame(data=df_pca, columns=['PC1', 'PC2'])
+
+# Visualize PCA results
+plt.scatter(df_reduced['PC1'], df_reduced['PC2'])
+plt.xlabel('Principal Component 1')
+plt.ylabel('Principal Component 2')
+plt.show()
+
+# Variance explained by each principal component
+variance_ratio = pca.explained_variance_ratio_
+print('Variance explained by each principal component:', variance_ratio)
