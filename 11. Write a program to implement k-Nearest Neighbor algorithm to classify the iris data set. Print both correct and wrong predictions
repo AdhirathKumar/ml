@@ -1,54 +1,27 @@
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
-%matplotlib inline 
 from sklearn.datasets import load_iris
-iris=load_iris()
-dir(iris)     
-iris.data
-ar=iris.data
-df=pd.DataFrame(ar,columns=iris.feature_names)
-df.head()
-y=iris.target
-y
-df['target']=y
-df.head()
-iris.target_names
-df[df.target==0].count()
-df[df.target==1].count()
-df[df.target==2].count()
-df.info()
-df0=df[df.target==0]
-df1=df[df.target==1]
-df2=df[df.target==2]
-plt.xlabel='sepal length (cm)'
-plt.ylabel='sepal width (cm)'
-plt.scatter(df0['sepal length (cm)'],df0['sepal width (cm)'],marker="*",color="red")
-plt.scatter(df1['sepal length (cm)'],df1['sepal width (cm)'],marker="+",color="green")
-plt.scatter(df2['sepal length (cm)'],df2['sepal width (cm)'],marker=".",color="blue")
-plt.xlabel='petal length (cm)'
-plt.ylabel='petal width (cm)'
-plt.scatter(df0['petal length (cm)'],df0['petal width (cm)'],marker="*",color="red")
-plt.scatter(df1['petal length (cm)'],df1['petal width (cm)'],marker="+",color="green")
-plt.scatter(df2['petal length (cm)'],df2['petal width (cm)'],marker=".",color="blue")
-X=df.drop(['sepal length (cm)', 'sepal width (cm)', 'target'],axis=1)
-X.head()
-y=df.target
 from sklearn.model_selection import train_test_split
-X_train,X_test,y_train,y_test=train_test_split(X,y,test_size=0.2,random_state=None,shuffle=True)
 from sklearn.neighbors import KNeighborsClassifier
-mod=KNeighborsClassifier(n_neighbors=3)
-mod.fit(X_train,y_train)
-mod.score(X_test,y_test)
-from sklearn.model_selection import cross_val_score
-res1=cross_val_score(mod,X,y)
-res1
-res.mean()
-mod1=GridSearchCV(KNeighborsClassifier(),{'n_neighbors':[1,2,3,4,5,6,7,8,9,10]},return_train_score=False)
-mod1.fit(X,y)
-mod1.best_score_
-mod1.best_params_
-y_predicted=mod1.predict(X_test)
-from sklearn.metrics import confusion_matrix
-cm=confusion_matrix(y_test,y_predicted)
-cm
+
+# Load iris dataset
+iris = load_iris()
+
+# Split dataset into features and target
+X = iris.data
+y = iris.target
+
+# Split dataset into training and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+
+# Fit KNN classifier to training set
+knn = KNeighborsClassifier(n_neighbors=3)
+knn.fit(X_train, y_train)
+
+# Make predictions on test set
+y_pred = knn.predict(X_test)
+
+# Print correct and wrong predictions
+for i in range(len(y_test)):
+    if y_test[i] == y_pred[i]:
+        print(f'Correct prediction for sample {i}: {iris.target_names[y_test[i]]}')
+    else:
+        print(f'Wrong prediction for sample {i}: predicted {iris.target_names[y_pred[i]]}, actual {iris.target_names[y_test[i]]}')
