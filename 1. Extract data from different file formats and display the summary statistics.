@@ -1,0 +1,46 @@
+########1########
+
+import pandas as pd
+data = pd.read_csv("file_name.csv")
+data.head()
+data.describe(include='all')
+
+########2########
+
+data = pd.read_excel("file_name.xlsx")
+data.head()
+data.describe()
+
+########3########
+
+import json
+with open('file_name.json','r') as f:
+  data = json.load(f)
+  print(data)
+
+########4########
+
+file = open('file_name.txt','r+')
+data = file.read()
+print(data)
+file.write("\nAdding new text file")
+data = file.read()
+print(data)
+
+########5########
+
+import xml.etree.ElementTree as ET
+tree = ET.parse('file_name.xml')
+root = tree.getroot()
+for child in root:
+    title = child.get('title')
+    category = child.get('category')    
+    print(f"Title: {title}, Category: {category}")
+
+########6########
+
+from zipfile import ZipFile
+file_name = "file_name.zip"
+with ZipFile(file_name, 'r') as zip:
+	zip.printdir()
+	data=zip.extractall()
