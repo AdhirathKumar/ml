@@ -1,0 +1,34 @@
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+%matplotlib inline
+df = pd.read_csv('/content/sample_data/titanic.csv')
+df.head()
+df.info()
+df.drop(['PassengerId','Name','Ticket','Fare','Cabin'],axis=1,inplace=True)
+df.columns
+df1=df.fillna({'Age':df['Age'].mean()})
+df1.corr()
+df1.drop(['Embarked','SibSp','Parch'],axis=1,inplace=True)
+df1.columns
+from sklearn.preprocessing import LabelEncoder 
+le=LabelEncoder()
+df1['Sex']=le.fit_transform(df1['Sex'])
+X=df1[['Pclass','Sex']]
+y=df1['Survived']
+from sklearn.discriminant_analysis import LinearDiscriminantAnalysis
+lda= LinearDiscriminantAnalysis()
+X_t=lda.fit_transform(X, y)
+lda.explained_variance_ratio_
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X_t, y, random_state=1)
+from sklearn.ensemble import RandomForestClassifier
+model= RandomForestClassifier(random_state=0)
+model.fit(X_train,y_train)
+from sklearn.model_selection import cross_val_score
+scores=cross_val_score(lda,X,y)
+scores
+from sklearn.metrics import confusion_matrix
+y_pred = lda.predict(X_test)
+cm = confusion_matrix(y_test, y_pred)
+cm
