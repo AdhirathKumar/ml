@@ -1,21 +1,27 @@
 import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 import seaborn as sns
-df=pd.read_csv('/content/sample_data/iris.data')
-df.head()
-df['species'].unique()
-df['species'].value_counts(normalize=True).plot.pie()
+import matplotlib.pyplot as plt
+
+# Load dataset
+df = pd.read_csv('dataset.csv')
+
+# Univariate analysis
+# Summary statistics
+print(df.describe())
+
+# Histogram of a numerical variable
+sns.histplot(data=df, x='numerical_variable')
 plt.show()
-df_setosa=df.loc[df['species']=='Iris-setosa']
-df_versicolor=df.loc[df['species']=='Iris-versicolor']
-df_virginica=df.loc[df['species']=='Iris-virginica']
-plt.plot(df_setosa['sepal_length'],np.zeros_like(df_setosa['sepal_length']),'x')
-plt.plot(df_virginica['sepal_length'],np.zeros_like(df_virginica['sepal_length']),'o')
-plt.plot(df_versicolor['sepal_length'],np.zeros_like(df_versicolor['sepal_length']),'^')
-plt.xlabel('sepal_length')
+
+# Count plot of a categorical variable
+sns.countplot(data=df, x='categorical_variable')
 plt.show()
-sns.pairplot(df,hue="species",height=5)
+
+# Multivariate analysis
+# Scatter plot of two numerical variables
+sns.scatterplot(data=df, x='numerical_variable1', y='numerical_variable2')
 plt.show()
-sns.heatmap(df.corr(),annot=True,cmap='Blues')
+
+# Heatmap of correlation matrix
+sns.heatmap(df.corr(), annot=True, cmap='coolwarm')
 plt.show()
