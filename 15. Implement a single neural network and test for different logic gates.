@@ -1,56 +1,19 @@
-import numpy as np
+from keras.models import Sequential
+from keras.layers import Dense
 
-# Define the sigmoid activation function
-def sigmoid(x):
-    return 1 / (1 + np.exp(-x))
+# Define the neural network model
+model = Sequential()
+model.add(Dense(1, input_dim=2, activation='sigmoid'))
 
-# Define the neural network class
-class NeuralNetwork:
-    def __init__(self, input_size, hidden_size, output_size):
-        # Initialize the weights for the input layer and the hidden layer
-        self.weights1 = np.random.randn(input_size, hidden_size)
-        self.weights2 = np.random.randn(hidden_size, output_size)
-    
-    def forward(self, X):
-        # Compute the dot product of the input with the weights for the input layer
-        self.z2 = np.dot(X, self.weights1)
-        
-        # Apply the sigmoid activation function to the output of the input layer
-        self.a2 = sigmoid(self.z2)
-        
-        # Compute the dot product of the output of the input layer with the weights for the output layer
-        self.z3 = np.dot(self.a2, self.weights2)
-        
-        # Apply the sigmoid activation function to the output of the output layer
-        y_hat = sigmoid(self.z3)
-        return y_hat
+# Compile the model
+model.compile(loss='binary_crossentropy', optimizer='adam', metrics=['accuracy'])
 
-# Define the logic gates
-logic_gates = {
-    'AND': np.array([[0, 0], [0, 1], [1, 0], [1, 1]]),
-    'OR': np.array([[0, 0], [0, 1], [1, 0], [1, 1]]),
-    'NAND': np.array([[0, 0], [0, 1], [1, 0], [1, 1]]),
-    'XOR': np.array([[0, 0], [0, 1], [1, 0], [1, 1]])
-}
+# Define the input and output for the AND gate
+X = [[0, 0], [0, 1], [1, 0], [1, 1]]
+y = [0, 0, 0, 1]
 
-# Train and test the neural network for each logic gate
-for name, data in logic_gates.items():
-    X = data
-    y = np.array([[0], [0], [0], [1]]) if name == 'XOR' else np.array([[0], [0], [0], [1]])
-    nn = NeuralNetwork(input_size=2, hidden_size=2, output_size=1)
-    
-    # Train the neural network for 10000 iterations
-    for i in range(10000):
-        y_hat = nn.forward(X)
-        error = y - y_hat
-        delta_output = error * sigmoid(y_hat, derivative=True)
-        error_hidden = delta_output.dot(nn.weights2.T)
-        delta_hidden = error_hidden * sigmoid(nn.a2, derivative=True)
-        nn.weights2 += nn.a2.T.dot(delta_output)
-        nn.weights1 += X.T.dot(delta_hidden)
-    
-    # Test the neural network on the input data and print the output
-    print(f'{name}:')
-    for i in range(len(X)):
-        prediction = nn.forward(X[i])
-        print(f'{X[i]} -> {prediction[0]:.4f}')
+# Train the model on the input and output
+model.fit(X, y, epochs=5000, verbose=0)
+
+# Test the model on new inputs
+print(model.predict([[0, 0], [0, 1], [1, 0], [1, 1]]))
